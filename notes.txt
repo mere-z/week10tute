@@ -1,0 +1,39 @@
+Concurrency and Parallelism!
+
+Parallelism: Multiple tasks are being done at the same time
+Concurrency: Not necessarily running at the same time, but being handled at the same time (e.g. read a file for a bit, write to it for a bit) 
+
+Processes: has their own file descriptors, file being run and it's own memory location 
+Threads: lighter weight method of execution, can have multiple threads that share the same memory
+
+Processes and threads are just separate bits of running code 
+
+(pseudocode guide to posix_spawn):
+note: 3rd and 4th arguments not needed for this course, leave as NULL for default behaviour\
+
+posix_spawn(&process_id, process_path, NULL, NULL, process_argv[], environ);
+
+(pseudocode guide to pthread_create):
+
+pthread_create(&thread_id, NULL, thread_function, *thread_data); 
+
+thread functions look like:
+
+void *function(void *data) {
+
+ //some code...
+
+}
+
+What is void *data? A GENERIC pointer, it can point to any data type!
+This generality means that we must cast the pointer before we use it, e.g.
+
+char *string = data; 
+
+Clarification on questions/bugs from tute:
+
+Difference between char** and char*[] ->
+- char*[x] declares an array of fixed size at compile time (this array can only ever have x elements)
+- char** dynamically allocates the array, offering more flexibility in terms of memory management and array size.
+
+WAITPID bug: when we use waitpid, we check if the return value is -1 to indicate an error. Waitpid returns the process id of the child process, so we CANNOT assume an error occurs when the return value != 0 (child process ids are some non zero value) 
